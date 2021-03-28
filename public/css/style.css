@@ -1,0 +1,7 @@
+body{
+    background-color: #ccfcfc;          /*PLANO DE FUNDO COR CINZA*/
+}
+
+#formulario-pergunta{
+    margin-top: 5vh;     /*aqui eu estou que eu quero adicionar uma 5% de altura da tela (vh significa a mesma coisa que %)*/
+}
