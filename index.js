@@ -3,8 +3,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const connection = require("./database/database");
 const Pergunta = require("./database/Pergunta");
-
-//Database
+const Resposta = require("./database/Resposta");
 //ESSA ESTRUTURÁ A BAIXO É CHAMADA DE PROMISSE:
 connection                                                          //CHAMAR A CONEXÃO
     .authenticate()                                                 //IRÁ TENTAR LOGAR NO MYSQL
