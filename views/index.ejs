@@ -16,7 +16,7 @@
                     <h3><%= pergunta.titulo %></h3>                                            <!-- EXIBIÇÃO DE VARIAVEL TITULO -->
                 </div>
                 <div class="card-footer">
-                    <button class="btn btn-primary">Responder</button>                         <!-- BOTÃO RESPONDER -->
+                    <a href="/pergunta/<%= pergunta.id %>"><button class="btn btn-primary">Responder</button></a>  <!-- BOTÃO DE PERGUNTA DINAMICO COM O LINK PARA O ID RESPECTIVO -->                       <!-- BOTÃO RESPONDER -->
                 </div>
             </div>
 
