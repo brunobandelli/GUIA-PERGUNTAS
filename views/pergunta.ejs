@@ -1,1 +1,11 @@
-<h1>Página da pergunta!</h1>
+<%- include('partials/header.ejs') %>
+<body>
+    <%- include('partials/navbar.ejs') %>
+    <div class="container">
+        <hr>
+        <h1><%= pergunta.titulo %></h1>                <!-- EXIBE O TITULO DA PERGUNTA ENCONTRADA -->
+        <P><%= pergunta.descricao %></P>               <!-- EXIBE A DESCRIÇÃO DA PERGUNTA ENCONTRADA -->
+        <hr>
+    </div>
+</body>
+<%- include('partials/footer.ejs') %>

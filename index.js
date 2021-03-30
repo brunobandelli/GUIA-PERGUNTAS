@@ -56,8 +56,10 @@ app.get("/pergunta/:id",(req, res) => {             // ROTA DE CADA ID DAS PERGU
     Pergunta.findOne({                              // MODEL PERGUNTA(REPRESENTANTE DA TABELA) || findOne() É O METODO DO SEQUELIZE QUE PROCURA UM DADO, COM UMA CONDIÇÃO. 
         where: {id: id}                             // PESQUISA O ID INSERIDO IGUAL AO ID QUE TEM NO BANCO DE DADOS
     }).then(pergunta => {                           // QUANDO A OPERAÇÃO DE BUSCA FOR CONCLUIDA, ENTÃO O THEN IRÁ PASSAR A "PERGUNTA FEITA" PARA A VARIAVEL PERGUNTA.
-        if(pergunta != undefined){                  // QUANDO A PERGUNTA FOR ENCONTRADA
-            res.render("pergunta");                 // SE SIM, DIRECIONA PARA PAGINA PERGUNTA (DENTRO DA VIEW) ("pergunta")
+        if(pergunta != undefined){                  // QUANDO A PERGUNTA FOR ENCONTRADA, SE SIM
+            res.render("pergunta",{                 // DIRECIONA PARA PAGINA PERGUNTA (DENTRO DA VIEW) ("pergunta")
+                pergunta: pergunta                  // VIEW: PERGUNTA, RECEBE OS DADOS DA VARIAVEL: PERGUNTA. 
+            });                
         }else{                                      // QUANDO A PERGUNTA NÃO FOR ENCONTRADA
             res.redirect("/");                      // SE NÃO, REDIRECIONA PARA A PAGINA PRINCIPAL ("/")
         }
