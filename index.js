@@ -25,7 +25,9 @@ app.use(bodyParser.json());
 
 // ROTAS
 app.get("/",(req, res) => {                                          //ROTA PRINCIPAL
-    Pergunta.findAll({ raw: true }).then(perguntas => {              //SIGNIFICA QUE ESTÁ RECEBENDO AS PERGUNTAS DE MANEIRA SIMPLES E ENVIANDO DENTRO DA VARIAVEL: perguntas
+    Pergunta.findAll({ raw: true, order:[                            //PESQUISA COMPLETA, INXUTA E ORDENADA
+        ['id','DESC']                                                //ORDEM: ASC = Crescente || DESC = Decrescente
+    ] }).then(perguntas => {                                         //SIGNIFICA QUE ESTÁ RECEBENDO AS PERGUNTAS DE MANEIRA SIMPLES E ENVIANDO DENTRO DA VARIAVEL: perguntas
         res.render("index",{                                         //FAZENDO ISSO ELE IRÁ LER O ARQUIVO HTML(index.ejs)
             perguntas: perguntas                                     //A VARIAVEL perguntas ESTA RECEBENDO AS LISTAS DE PERGUNTAS, DENTRO DA VARIAVEL: perguntas
         });                                                
@@ -47,5 +49,20 @@ app.post("/salvarpergunta",(req, res) => {          // ROTA PARA RECEBER OS DADO
         res.redirect("/");                          // FARÁ COM QUE O USUARIO SEJÁ REDIRECIONADO PARA A PAGINA PRINCIPAL.
     });
 });
+
+
+app.get("/pergunta/:id",(req, res) => {             // ROTA DE CADA ID DAS PERGUNTAS(PARAMETRO: :id)
+    var id = req.params.id;                         // RECEBE OS DADOS DO PARAMETRO :id 
+    Pergunta.findOne({                              // MODEL PERGUNTA(REPRESENTANTE DA TABELA) || findOne() É O METODO DO SEQUELIZE QUE PROCURA UM DADO, COM UMA CONDIÇÃO. 
+        where: {id: id}                             // PESQUISA O ID INSERIDO IGUAL AO ID QUE TEM NO BANCO DE DADOS
+    }).then(pergunta => {                           // QUANDO A OPERAÇÃO DE BUSCA FOR CONCLUIDA, ENTÃO O THEN IRÁ PASSAR A "PERGUNTA FEITA" PARA A VARIAVEL PERGUNTA.
+        if(pergunta != undefined){                  // QUANDO A PERGUNTA FOR ENCONTRADA
+            res.render("pergunta");                 // SE SIM, DIRECIONA PARA PAGINA PERGUNTA (DENTRO DA VIEW) ("pergunta")
+        }else{                                      // QUANDO A PERGUNTA NÃO FOR ENCONTRADA
+            res.redirect("/");                      // SE NÃO, REDIRECIONA PARA A PAGINA PRINCIPAL ("/")
+        }
+    });
+});
+
 
 app.listen(8080,()=>{console.log("App rodando!");});
