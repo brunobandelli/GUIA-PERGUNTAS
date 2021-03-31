@@ -57,7 +57,10 @@ app.get("/pergunta/:id",(req, res) => {             // ROTA DE CADA ID DAS PERGU
     }).then(pergunta => {                           // QUANDO A OPERAÇÃO DE BUSCA FOR CONCLUIDA, ENTÃO O THEN IRÁ PASSAR A "PERGUNTA FEITA" PARA A VARIAVEL PERGUNTA.
  	if(pergunta != undefined){                          //QUANDO A PERGUNTA FOR ENCONTRADA( E NÃO FOR INDEFINIDA ), SE SIM
        	Resposta.findAll({					            //PROCURA TODOS OS DADOS NO MODEL Resposta CONFORME A BAIXO:
-		where: {perguntaId: pergunta.id}		        //CONDICIONAL(ONDE): PESQUISA TODAS AS RESPOSTAS QUE TENHA O MESMO ID DA PERGUNTA RESPECTIVA CONFORME O BANCO DE DADOS (respostas)
+		where: {perguntaId: pergunta.id},		        //CONDICIONAL(ONDE): PESQUISA TODAS AS RESPOSTAS QUE TENHA O MESMO ID DA PERGUNTA RESPECTIVA CONFORME O BANCO DE DADOS (respostas)
+        order: [                                        //ORDENA AS RESPOSTAS
+            ['id','DESC']                               //PELO IDE DE FORMA DECRESCENTE
+        ]
 	}).then(respostas => {					            //QUANDO A OPERAÇÃO DE BUSCA FOR CONCLUIDA, ENTÃO O THEN IRÁ PASSAR A "RESPOSTA FEITA + PERGUNTA" PARA A VARIAVEL RESPOSTAS.
 		res.render("pergunta", {			            //DIRECIONA PARA PAGINA PERGUNTA (DENTRO DA VIEW) ("pergunta")
 			pergunta: pergunta,			                //CAMPO pergunta, RECEBE OS DADOS DA VARIAVEL: pergunta. 
@@ -71,7 +74,7 @@ app.get("/pergunta/:id",(req, res) => {             // ROTA DE CADA ID DAS PERGU
 });
        
 
-app.post("/responder", (req, res) => {              // ROTA PARA RECEBER OS DADOS DO FORMULARIO (pergunta.ejs)
+app.post("/responder", (req, res) => {              //ROTA PARA RECEBER OS DADOS DO FORMULARIO (pergunta.ejs)
     var corpo = req.body.corpo;                     //IRÁ RECEBER O CONTEUDO QUE VEM DA TEXTAREA PELO NAME CORPO NO pergunta.ejs [ req = requisição / body = corpo da requisição / nome do campo ]
     var perguntaId = req.body.pergunta;             //IRÁ RECEBER O ID DINAMICO DE PELO NAME PEGUNTA NO pergunta.ejs
     Resposta.create({                               //MODEL: Resposta // EQUIVALENTE AO CÓDIGO SQL: INSERTE INTO respotas ...Resposta.
