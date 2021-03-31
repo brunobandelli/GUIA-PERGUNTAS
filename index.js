@@ -38,7 +38,7 @@ app.get("/perguntar",(req, res) => {
     res.render("perguntar");                       //FAZENDO ISSO ELE IRÁ LER O ARQUIVO HTML(perguntar.ejs)   
 });
 
-app.post("/salvarpergunta",(req, res) => {          // ROTA PARA RECEBER OS DADOS DO FORMULARIO
+app.post("/salvarpergunta",(req, res) => {          // ROTA PARA RECEBER OS DADOS DO FORMULARIO (perguntar.ejs)
     var titulo = req.body.titulo;                   // RECEBE OS DADOS DO TITULO NA VAR PELO NAME TITULO NO perguntar.ejs
     var descricao =  req.body.descricao;            // RECEBER OS DADOS DA DESCRIÇÃO NA VAR PELO NAME DESCRICAO NO perguntar.ejs
     Pergunta.create({                               // CHAMAR O MODEL Pergunta. // EQUIVALENTE AO CÓDIGO SQL: INSERTE INTO perguntas ...Pergunta.                              
@@ -53,7 +53,7 @@ app.post("/salvarpergunta",(req, res) => {          // ROTA PARA RECEBER OS DADO
 app.get("/pergunta/:id",(req, res) => {             // ROTA DE CADA ID DAS PERGUNTAS(PARAMETRO: :id)
     var id = req.params.id;                         // RECEBE OS DADOS DO PARAMETRO :id 
     Pergunta.findOne({                              // MODEL PERGUNTA(REPRESENTANTE DA TABELA) || findOne() É O METODO DO SEQUELIZE QUE PROCURA UM DADO, COM UMA CONDIÇÃO. 
-        where: {id: id}                             // PESQUISA O ID INSERIDO IGUAL AO ID QUE TEM NO BANCO DE DADOS
+        where: {id: id}                             // PESQUISA O ID INSERIDO IGUAL AO ID QUE TEM NO BANCO DE DADOS (perguntas)
     }).then(pergunta => {                           // QUANDO A OPERAÇÃO DE BUSCA FOR CONCLUIDA, ENTÃO O THEN IRÁ PASSAR A "PERGUNTA FEITA" PARA A VARIAVEL PERGUNTA.
         if(pergunta != undefined){                  // QUANDO A PERGUNTA FOR ENCONTRADA, SE SIM
             res.render("pergunta",{                 // DIRECIONA PARA PAGINA PERGUNTA (DENTRO DA VIEW) ("pergunta")
@@ -65,14 +65,15 @@ app.get("/pergunta/:id",(req, res) => {             // ROTA DE CADA ID DAS PERGU
     });
 });
 
-app.post("/responder", (req, res) => {
+app.post("/responder", (req, res) => {              // ROTA PARA RECEBER OS DADOS DO FORMULARIO (pergunta.ejs)
     var corpo = req.body.corpo;                     //IRÁ RECEBER O CONTEUDO QUE VEM DA TEXTAREA PELO NAME CORPO NO pergunta.ejs [ req = requisição / body = corpo da requisição / nome do campo ]
     var perguntaId = req.body.pergunta;             //IRÁ RECEBER O ID DINAMICO DE PELO NAME PEGUNTA NO pergunta.ejs
     Resposta.create({                               //MODEL: Resposta // EQUIVALENTE AO CÓDIGO SQL: INSERTE INTO respotas ...Resposta.
         corpo: corpo,                               //CAMPO CORPO RECEBE OS DADOS DA VARIAVEL CORPO DO FORMULÁRIO: var corpo = req.body.corpo; (pergunta.ejs)
         perguntaId: perguntaId                      //CAMPO PERGUNTAID RECEBE OS DADOS DA VARIAVEL PERGUNTAID DO FORMULÁRIO: var perguntaId = req.body.pergunta; (pergunta.ejs)
-
+    }).then(() => {                                 //QUANDO A PERGUNTA FOR SALVA COM SUCESSO NO MEU BANCO DE DADOS, ENTÃO FARÁ O COMANDO A BAIXO:
+        res.redirect("/pergunta/"+perguntaId);      //APÓS RESPONDER A PERGUNTA, IRÁ REDIRECIONAR PARA A PAGINA DO ID CORRESPONDENTE A PERGUNTA QUE VOCÊ RESPONDEU.
     });
-})
+});
 
 app.listen(8080,()=>{console.log("App rodando!");});
