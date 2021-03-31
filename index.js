@@ -55,15 +55,21 @@ app.get("/pergunta/:id",(req, res) => {             // ROTA DE CADA ID DAS PERGU
     Pergunta.findOne({                              // MODEL PERGUNTA(REPRESENTANTE DA TABELA) || findOne() É O METODO DO SEQUELIZE QUE PROCURA UM DADO, COM UMA CONDIÇÃO. 
         where: {id: id}                             // PESQUISA O ID INSERIDO IGUAL AO ID QUE TEM NO BANCO DE DADOS (perguntas)
     }).then(pergunta => {                           // QUANDO A OPERAÇÃO DE BUSCA FOR CONCLUIDA, ENTÃO O THEN IRÁ PASSAR A "PERGUNTA FEITA" PARA A VARIAVEL PERGUNTA.
-        if(pergunta != undefined){                  // QUANDO A PERGUNTA FOR ENCONTRADA( E NÃO FOR INDEFINIDA ), SE SIM
-            res.render("pergunta",{                 // DIRECIONA PARA PAGINA PERGUNTA (DENTRO DA VIEW) ("pergunta")
-                pergunta: pergunta                  // VIEW: PERGUNTA, RECEBE OS DADOS DA VARIAVEL: PERGUNTA. 
-            });                
-        }else{                                      // QUANDO A PERGUNTA NÃO FOR ENCONTRADA
-            res.redirect("/");                      // SE NÃO, REDIRECIONA PARA A PAGINA PRINCIPAL ("/")
+ 	if(pergunta != undefined){                          //QUANDO A PERGUNTA FOR ENCONTRADA( E NÃO FOR INDEFINIDA ), SE SIM
+       	Resposta.findAll({					            //PROCURA TODOS OS DADOS NO MODEL Resposta CONFORME A BAIXO:
+		where: {perguntaId: pergunta.id}		        //CONDICIONAL(ONDE): PESQUISA TODAS AS RESPOSTAS QUE TENHA O MESMO ID DA PERGUNTA RESPECTIVA CONFORME O BANCO DE DADOS (respostas)
+	}).then(respostas => {					            //QUANDO A OPERAÇÃO DE BUSCA FOR CONCLUIDA, ENTÃO O THEN IRÁ PASSAR A "RESPOSTA FEITA + PERGUNTA" PARA A VARIAVEL RESPOSTAS.
+		res.render("pergunta", {			            //DIRECIONA PARA PAGINA PERGUNTA (DENTRO DA VIEW) ("pergunta")
+			pergunta: pergunta,			                //CAMPO pergunta, RECEBE OS DADOS DA VARIAVEL: pergunta. 
+			respostas: respostas			            //CAMPO respostas, RECEBE OS DADOS DA VARIAVEL: respostas. 
+		});						                        //OU SEJÁ ESSES CAMPOS SERÃO PASSADOS PARA A VIEW pergunta.ejs
+	});              
+        }else{                                      // QUANDO A PERGUNTA NÃO FOR ENCONTRADA, SE NÃO
+            res.redirect("/");                      // REDIRECIONA PARA A PAGINA PRINCIPAL ("/")
         }
     });
 });
+       
 
 app.post("/responder", (req, res) => {              // ROTA PARA RECEBER OS DADOS DO FORMULARIO (pergunta.ejs)
     var corpo = req.body.corpo;                     //IRÁ RECEBER O CONTEUDO QUE VEM DA TEXTAREA PELO NAME CORPO NO pergunta.ejs [ req = requisição / body = corpo da requisição / nome do campo ]
