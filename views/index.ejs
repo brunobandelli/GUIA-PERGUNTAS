@@ -1,0 +1,29 @@
+<%- include('partials/header.ejs') %>
+<body>
+    <%- include('partials/navbar.ejs') %>
+
+
+    <div class="container">
+        <hr>
+        <h1> Perguntas </h1>
+        <hr>
+        <a href="/perguntar" class="btn btn-primary">Perguntar</a>                             <!-- A CLASS DO BOOTSTRAP, TORNARÁ A TAG <a href> EM BOTÃO>-->
+        <hr>
+        <% perguntas.forEach(pergunta => { %>                                                   <!-- COMANDO FOREACH QUE RECEBERÁ CADA VALOR DA TABELA PERGUNTAS DO BANCO DE DADOS DENTRO DA VARIAVEL PERGUNTAS-->
+            <br>
+            <div class="card">
+                <div class="card-body">
+                    <h3><%= pergunta.titulo %></h3>                                            <!-- EXIBIÇÃO DE VARIAVEL TITULO -->
+                </div>
+                <div class="card-footer">
+                    <a href="/pergunta/<%= pergunta.id %>"><button class="btn btn-primary">Responder</button></a>  <!-- BOTÃO DE PERGUNTA DINAMICO COM O LINK PARA O ID RESPECTIVO -->                       <!-- BOTÃO RESPONDER -->
+                </div>
+            </div>
+
+        <% }) %>
+    </div>
+
+
+</body>
+
+<%- include('partials/footer.ejs') %>                                                       
